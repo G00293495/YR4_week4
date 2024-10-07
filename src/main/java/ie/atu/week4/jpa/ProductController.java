@@ -35,7 +35,6 @@ public class ProductController {
         }
         return null;
     }
-
     @PutMapping("/updateProduct/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable int id, @RequestBody Product updatedProduct) {
         Product existingProduct = findProductById(id);

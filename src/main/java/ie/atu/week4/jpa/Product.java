@@ -1,5 +1,4 @@
 package ie.atu.week4.jpa;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
