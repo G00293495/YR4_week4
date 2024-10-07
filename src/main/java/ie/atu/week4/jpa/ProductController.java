@@ -17,8 +17,9 @@ public class ProductController {
 
     }
     @GetMapping("/getProducts")
-    public List<Product> getProducts() {
-        return productList;
+    public List<Product> getProducts(@RequestBody Product product) {
+        productList = productService.get(product);
+        return ResponseEntity.ok(productList);
     }
 
     @PostMapping("/addProduct")
