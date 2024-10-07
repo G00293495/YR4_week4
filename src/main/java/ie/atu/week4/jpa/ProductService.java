@@ -19,9 +19,9 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public List<Product> delete(Product product)
+    public List<Product> get(Product product)
     {
-        ProductRepository.remove(product);
         return productRepository.findAll();
     }
 }
+
