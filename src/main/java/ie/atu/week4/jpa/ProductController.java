@@ -9,56 +9,29 @@ import java.util.List;
 @RestController
 @RequestMapping("/product")
 public class ProductController {
-    private ProductRepository productRepository;
+
+    private final ProductRepository productRepository;
     private ProductService productService;
-    private List<Product> productList = new ArrayList<>();
-    public ProductController(ProductService productService) {
+
+    public ProductController(ProductService productService, ProductRepository productRepository) {
         this.productService = productService;
-
+        this.productRepository = productRepository;
     }
-    @GetMapping("/getProducts")
-    public List<Product> getProducts(@RequestBody Product product) {
-        productList = productService.get(product);
-        return ResponseEntity.ok(productList);
+    @GetMapping("/all")
+    public List<Product> getProducts() {
+        return productService.findAll();
     }
-
-    @PostMapping("/addProduct")
-    public ResponseEntity<List> addProduct(@RequestBody Product product) {
-        productList = productService.add(product);
-        return ResponseEntity.ok(productList);
+    @PostMapping("/add")
+    public void addProduct(Product product) {
+        productService.add(product);
     }
-
-    private Product findProductById(int id) {
-        for (Product product : productList) {
-            if (product.getProductCode() == id) {
-                return product;
-            }
-        }
-        return null;
+    @PutMapping("/update/{id}")
+    public void updateProduct(Long id, Product product) {
+        Product updateProduct = productRepository.getReferenceById(id);
+        updateProduct.setId(product.getId());
     }
-    @PutMapping("/updateProduct/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable int id, @RequestBody Product updatedProduct) {
-        Product existingProduct = findProductById(id);
-
-        if (existingProduct != null) {
-            existingProduct.setProductName(updatedProduct.getProductName());
-            existingProduct.setProductDescription(updatedProduct.getProductDescription());
-            existingProduct.setProductPrice(updatedProduct.getProductPrice());
-            return ResponseEntity.ok(existingProduct);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @DeleteMapping("/deleteProduct/{id}")
-    public ResponseEntity<List<Product>> deleteProduct(@PathVariable int id) {
-        Product existingProduct = findProductById(id);
-
-        if (existingProduct != null) {
-            productList.remove(existingProduct);
-            return ResponseEntity.ok(productList);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @DeleteMapping("/remove/{id}")
+    public void deleteProduct(Long id) {
+        productRepository.deleteById(id);
     }
 }
