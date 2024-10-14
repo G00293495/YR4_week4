@@ -2,36 +2,37 @@ package ie.atu.week4.jpa;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
+import jakarta.validation.Valid;
+
 
 @RestController
 @RequestMapping("/product")
 public class ProductController {
 
-    private final ProductRepository productRepository;
+    private final ProductRepo productRepo;
     private ProductService productService;
 
-    public ProductController(ProductService productService, ProductRepository productRepository) {
+    public ProductController(ProductService productService, ProductRepo productRepo) {
         this.productService = productService;
-        this.productRepository = productRepository;
+        this.productRepo = productRepo;
     }
     @GetMapping("/all")
     public List<Product> getProducts() {
         return productService.findAll();
     }
     @PostMapping("/add")
-    public void addProduct(Product product) {
+    public Product addProduct(@Valid @RequestBody  Product product) {
         productService.add(product);
+        return product;
     }
     @PutMapping("/update/{id}")
-    public void updateProduct(Long id, Product product) {
-        Product updateProduct = productRepository.getReferenceById(id);
-        updateProduct.setId(product.getId());
+    public Product updateProduct(@Valid @PathVariable Long id,@Valid @RequestBody Product product) {
+        productService.update(id, product);
+        return product;
     }
     @DeleteMapping("/remove/{id}")
-    public void deleteProduct(Long id) {
-        productRepository.deleteById(id);
+    public void deleteProduct(@Valid @PathVariable Long id) {
+        productRepo.deleteById(id);
     }
 }
