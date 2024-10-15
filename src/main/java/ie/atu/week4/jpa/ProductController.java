@@ -1,38 +1,41 @@
 package ie.atu.week4.jpa;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import jakarta.validation.Valid;
 
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/product")
 public class ProductController {
 
-    private final ProductRepo productRepo;
     private ProductService productService;
 
-    public ProductController(ProductService productService, ProductRepo productRepo) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.productRepo = productRepo;
     }
-    @GetMapping("/all")
+
+    @GetMapping("/getProducts")
     public List<Product> getProducts() {
-        return productService.findAll();
+        return productService.getProducts();
     }
-    @PostMapping("/add")
-    public Product addProduct(@Valid @RequestBody  Product product) {
-        productService.add(product);
+
+    @PostMapping("/addProduct")
+    public Product addTask(@Valid @RequestBody Product product) {
+        productService.addProduct(product);
         return product;
     }
-    @PutMapping("/update/{id}")
-    public Product updateProduct(@Valid @PathVariable Long id,@Valid @RequestBody Product product) {
-        productService.update(id, product);
-        return product;
-    }
+
     @DeleteMapping("/remove/{id}")
-    public void deleteProduct(@Valid @PathVariable Long id) {
-        productRepo.deleteById(id);
+    public void removeProduct(@Valid @PathVariable Long id) {
+        productService.removeProduct(id);
+    }
+
+    @PutMapping("/update/{id}")
+    public Product updateProduct(@Valid @PathVariable Long id, @Valid @RequestBody Product product) {
+        productService.updateProduct(id, product);
+        return product;
     }
 }

@@ -1,4 +1,5 @@
 package ie.atu.week4.jpa;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class Product
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private long id;
     @NotBlank(message = "Product name is mandatory")
     private String productName;
